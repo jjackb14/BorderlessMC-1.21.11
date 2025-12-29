@@ -3,6 +3,9 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-brightgreen?style=flat-square)](https://github.com/jjackb14/BorderlessMC/releases)
 [![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square)](https://adoptium.net/)
 [![Build](https://img.shields.io/github/actions/workflow/status/jjackb14/BorderlessMC/build.yml?style=flat-square)](https://github.com/jjackb14/BorderlessMC/actions)
+[![License](https://img.shields.io/badge/License-MPL--2.0-blue?style=flat-square)](https://github.com/jjackb14/BorderlessMC/blob/main/LICENSE)
+[![Mod Loader](https://img.shields.io/badge/Mod%20Loader-Fabric-lightgray?style=flat-square)](https://fabricmc.net/)
+[![Environment](https://img.shields.io/badge/Environment-Client--side-blueviolet?style=flat-square)](#)
 
 Borderless fullscreen for Minecraft (Fabric) — runs fullscreen as a borderless window on the monitor the game is currently on.
 
