@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "borderlessmc",
+	"version": "${version}",
+	"name": "BorderlessMC",
+	"description": "A Fabric Mod to play Minecraft in fullscreen borderless",
+	"authors": [
+		"jjackb14"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/borderlessmc/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.jjackb14.borderlessmc.BorderlessMC"
+		],
+		"fabric-datagen": [
+			"com.jjackb14.borderlessmc.BorderlessMCDataGenerator"
+		],
+        "client": [
+          "com.jjackb14.borderlessmc.BorderlessMCClient"
+        ]
+	},
+	"mixins": [
+		"borderlessmc.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
