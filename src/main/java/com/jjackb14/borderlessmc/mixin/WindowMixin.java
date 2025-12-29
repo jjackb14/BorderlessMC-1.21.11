@@ -1,5 +1,6 @@
 package com.jjackb14.borderlessmc.mixin;
 
+import com.jjackb14.borderlessmc.config.BorderlessConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
 import org.lwjgl.glfw.GLFW;
@@ -129,6 +130,8 @@ public abstract class WindowMixin {
     private void borderless_onToggleFullscreenTail(CallbackInfo ci) {
         // If vanilla didn't just enter fullscreen, do nothing.
         if (!isFullscreen()) return;
+
+        if (!BorderlessConfig.get().enabled) return;
 
         long window = getHandle();
         enterBorderless(window);
