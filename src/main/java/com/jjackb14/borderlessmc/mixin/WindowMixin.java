@@ -1,5 +1,6 @@
 package com.jjackb14.borderlessmc.mixin;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -11,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.nio.IntBuffer;
 
-import static org.lwjgl.system.MemoryStack.stackMallocInt;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 @Mixin(Window.class)
@@ -19,15 +19,28 @@ public abstract class WindowMixin {
 	@Shadow public abstract long getHandle();
     @Shadow public abstract boolean isFullscreen();
 
+    /**
+     * Shadow Minecraft's fullscreen field so we can force the internal state.
+     */
+    @Shadow private boolean fullscreen;
+
     @Inject(method = "toggleFullscreen", at = @At("TAIL"))
     private void borderlessOnToggleFullscreen(CallbackInfo ci) {
-        if (!isFullscreen()) {
-            return;
-        }
-
         long window = getHandle();
 
-        applyBorderless(window);
+        if (isFullscreen()) {
+            applyBorderless(window);
+
+            //Makes Minecraft treat this as windowed.
+            this.fullscreen = false;
+
+            //Keeps the video settings toggle in sync.
+            var client = MinecraftClient.getInstance();
+            trySetFullsreenOption(client);
+        }
+        else {
+            restoreWindowed(window);
+        }
     }
 
     private void applyBorderless(long window) {
@@ -96,7 +109,7 @@ public abstract class WindowMixin {
 
         long bestMonitor = 0L;
 
-        for (int i = 0; i < monitors.remaining(); i++) {
+        for (int i = 0; i < monitors.limit(); i++) {
             long m = monitors.get(i);
 
             int mx, my;
@@ -128,5 +141,21 @@ public abstract class WindowMixin {
         }
 
         return 0L;
+    }
+
+    private void trySetFullsreenOption(MinecraftClient client) {
+        try {
+            client.options.getClass().getField("fullscreen").get(client.options)
+                    .getClass().getMethod("setValue", Object.class)
+                    .invoke(client.options.getClass().getField("fullscreen").get(client.options), Boolean.FALSE);
+        }
+        catch (Throwable ignored) {
+            // If reflection fails, it still works functionally; the menu toggle may stay "ON".
+        }
+
+        try {
+            client.options.getClass().getMethod("write").invoke(client.options);
+        }
+        catch (Throwable ignored) {}
     }
 }
